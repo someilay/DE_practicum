@@ -227,33 +227,33 @@ class GuiConfigurator:
     @staticmethod
     def create_horizontal_layout(**kwargs: Union[QtWidgets.QLayout, QtWidgets.QWidget]):
         """
-        Create horizontal layout for components placement
+        Create a horizontal layout for components placement
 
         :param kwargs: components and layouts
         :return: QHBoxLayout
         """
-        layot = QtWidgets.QHBoxLayout()
+        layout = QtWidgets.QHBoxLayout()
         for item in kwargs.values():
             if isinstance(item, QtWidgets.QLayout):
-                layot.addLayout(item)
+                layout.addLayout(item)
             elif isinstance(item, QtWidgets.QWidget):
-                layot.addWidget(item)
+                layout.addWidget(item)
 
-        return layot
+        return layout
 
     @staticmethod
     def create_vertical_layout(**kwargs: Union[QtWidgets.QLayout, QtWidgets.QWidget]):
         """
-        Create vertical layout for components placement
+        Create a vertical layout for components placement
 
         :param kwargs: components and layouts
         :return: QVBoxLayout
         """
-        layot = QtWidgets.QVBoxLayout()
+        layout = QtWidgets.QVBoxLayout()
         for item in kwargs.values():
             if isinstance(item, QtWidgets.QLayout):
-                layot.addLayout(item)
+                layout.addLayout(item)
             elif isinstance(item, QtWidgets.QWidget):
-                layot.addWidget(item)
+                layout.addWidget(item)
 
-        return layot
+        return layout

@@ -20,6 +20,13 @@ class NumericalMethod:
         self._ns: Optional[np.ndarray] = None
 
     def _get_constant_solution(self, x0: float, y0: float):
+        """
+        Get points of analytical solution
+
+        :param x0: start point (x component)
+        :param y0: start point (y component)
+        :return: function from float to float
+        """
         if abs(self._solution(x0)) > 10**-9 and abs(y0) > 10**-2:
             return lambda x: self._solution(x) * y0 / self._solution(x0)
         else:
