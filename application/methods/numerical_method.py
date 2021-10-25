@@ -19,17 +19,24 @@ class NumericalMethod:
         self._gte_d: Optional[np.ndarray] = None
         self._ns: Optional[np.ndarray] = None
 
-    def solution(self, x0: float, x: float, dpx: int = 200):
+    def _get_constant_solution(self, x0: float, y0: float):
+        if abs(self._solution(x0)) > 10**-9 and abs(y0) > 10**-2:
+            return lambda x: self._solution(x) * y0 / self._solution(x0)
+        else:
+            raise ValueError("Input initial values lead to arithmetical error!", {"x0": "x0", "y0": "y0"})
+
+    def solution(self, x0: float, y0: float, x: float, dpx: int = 200):
         """
         Get points of analytical solution
 
-        :param x0: start point
+        :param x0: start point (x component)
+        :param y0: start point (y component)
         :param x: end point
         :param dpx: number of points per unit
         :return: array of x, array of corresponding y
         """
         x_array = np.linspace(x0, x, int((x - x0) * dpx))
-        return x_array, np.apply_along_axis(self._solution, 0, x_array)
+        return x_array, np.apply_along_axis(self._get_constant_solution(x0, y0), 0, x_array)
 
     def compute(self, x0: float, y0: float, x: float, n: int):
         """
@@ -45,6 +52,7 @@ class NumericalMethod:
         self._y = np.empty(n + 1)
         self._lte = np.empty(n + 1)
         self._gte = np.empty(n + 1)
+        constant_solution = self._get_constant_solution(x0, y0)
 
         h = (x - x0) / n
         self._x[0] = x0
@@ -56,12 +64,12 @@ class NumericalMethod:
         for i in range(1, n + 1):
             self._x[i] = self._x[i - 1] + h
             self._y[i] = self._y[i - 1] + h * self._a(self._x[i - 1], self._y[i - 1], h)
-            self._lte[i] = self._solution(self._x[i]) - self._solution(self._x[i - 1]) - h * self._a(
-                self._x[i - 1], self._solution(self._x[i - 1]), h
+            self._lte[i] = constant_solution(self._x[i]) - constant_solution(self._x[i - 1]) - h * self._a(
+                self._x[i - 1], constant_solution(self._x[i - 1]), h
             )
 
         # Compute gte
-        self._gte = np.apply_along_axis(self._solution, 0, self._x) - self._y
+        self._gte = np.apply_along_axis(constant_solution, 0, self._x) - self._y
 
         return self._x, self._y, self._lte, self._gte
 

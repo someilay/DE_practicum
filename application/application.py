@@ -16,7 +16,7 @@ class Application:
         app = QtWidgets.QApplication([])
         midleware = Midleware(
             lambda x, y: (3 * y + 2 * x * y) / x ** 2,
-            lambda x: e ** (3 - 3 / x) * x ** 2
+            lambda x: e ** (- 3 / x) * x ** 2
         )
 
         main_window = MainWindow(app, midleware)

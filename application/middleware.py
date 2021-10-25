@@ -130,7 +130,7 @@ class Midleware:
                                      show_runge_kutta, runge_kutta_label, runge_kutta_color)
 
         if graph_type == GuiConfigurator.GRAPH:
-            exact_x, exact_y = self._e_m.solution(x0, x)
+            exact_x, exact_y = self._e_m.solution(x0, y0, x)
             kwargs["exact"] = {"x": exact_x, "y": exact_y, "label": exact_label, "color": exact_color}
 
         sc.plot(title + " | " + graph_type, xlabel, ylabel, **kwargs)
